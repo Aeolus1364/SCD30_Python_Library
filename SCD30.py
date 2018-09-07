@@ -1,10 +1,9 @@
 import smbus
 
-class SCD30:
-    ADR = 0x61
-  
-    def __init__(self, port=1):
+class SCD30:  
+    def __init__(self, port=1, address=0x61):
         self.bus = smbus.SMBus(port)
+        self.adr = address
 
     def sendCommand(self, cmd, val=None):  # sends a 2 byte command
         if val:
@@ -14,19 +13,19 @@ class SCD30:
 
             # crc = calcCRC8(data)
 
-            self.bus.write_byte(ADR, cmd >> 8)  # sends the MSB
-            self.bus.write_byte(ADR, cmd & 0xFF)  # sends the LSB
-            self.bus.write_byte(ADR, data[0])
-            self.bus.write_byte(ADR, data[1])
-            self.bus.write_byte(ADR, crc)
+            self.bus.write_byte(self.adr, cmd >> 8)  # sends the MSB
+            self.bus.write_byte(self.adr, cmd & 0xFF)  # sends the LSB
+            self.bus.write_byte(self.adr, data[0])
+            self.bus.write_byte(self.adr, data[1])
+            self.bus.write_byte(self.adr, crc)
 
         else:
-            self.bus.write_byte(ADR, cmd >> 8)  # sends the MSB
-            self.bus.write_byte(ADR, cmd & 0xFF)  # sends the LSB
+            self.bus.write_byte(self.adr, cmd >> 8)  # sends the MSB
+            self.bus.write_byte(self.adr, cmd & 0xFF)  # sends the LSB
 
     def readRegister(self, reg):
-        self.bus.write_byte(ADR, reg >> 8)
-        self.bus.write_byte(ADR, reg & 0xFF)
+        self.bus.write_byte(self.adr, reg >> 8)
+        self.bus.write_byte(self.adr, reg & 0xFF)
 
         msb = self.bus.read_byte()
         lsb = self.bus.read_byte()
