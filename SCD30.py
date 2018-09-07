@@ -14,7 +14,7 @@ class SCD30:
     def readRegister(self, reg):
         self.sendCommand(reg)
 
-        data = bytearray(self.bus.read_i2c_block_data(self.adr, 0))
+        data = self.bus.read_i2c_block_data(self.adr, 0)
         return data
 
         # def calcCRC8(data, length):
