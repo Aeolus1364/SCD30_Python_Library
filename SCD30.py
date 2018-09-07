@@ -6,7 +6,7 @@ class SCD30:
         self.adr = address
 
     def sendCommand(self, cmd):  # sends a 2 byte command
-        data = []
+        data = [0]*2
         data[0] = cmd >> 8
         data[1] = cmd & 0xFF
         self.bus.write_i2c_block_data(self.adr, data[0], data[1:])
