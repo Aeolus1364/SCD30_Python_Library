@@ -28,8 +28,8 @@ class SCD30:
         self.bus.write_byte(ADR, reg >> 8)
         self.bus.write_byte(ADR, reg & 0xFF)
 
-        msb = bus.read_byte()
-        lsb = bus.read_byte()
+        msb = self.bus.read_byte()
+        lsb = self.bus.read_byte()
         data = msb << 8 | lsb
         return data
 
