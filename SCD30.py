@@ -11,10 +11,10 @@ class SCD30:
         data[1] = cmd & 0xFF
         self.bus.write_i2c_block_data(self.adr, data[0], data[1:])
 
-    def readRegister(self, reg):
+    def readRegister(self, reg, length):
         self.sendCommand(reg)
 
-        data = self.bus.read_i2c_block_data(self.adr, 0)
+        data = self.bus.read_i2c_block_data(self.adr, 0, length)
         return data
 
         # def calcCRC8(data, length):
