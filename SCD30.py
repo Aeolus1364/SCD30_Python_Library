@@ -3,7 +3,7 @@ import smbus
 class SCD30:
     ADR = 0x61
   
-    def init(self, port=1):
+    def __init__(self, port=1):
         self.bus = smbus.SMBus(port)
 
     def sendCommand(self, cmd, val=None):  # sends a 2 byte command
