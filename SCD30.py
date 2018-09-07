@@ -1,9 +1,14 @@
 import smbus
 
-class SCD30:  
+class Sensor:
     def __init__(self, port=1, address=0x61):
         self.bus = smbus.SMBus(port)
         self.adr = address
+
+        self.polynomial = 0x31
+        self.intialization = 0xFF
+
+
 
     def sendCommand(self, cmd):  # sends a 2 byte command
         data = [0]*2
@@ -17,5 +22,16 @@ class SCD30:
         data = self.bus.read_i2c_block_data(self.adr, 0, length)
         return data
 
-        # def calcCRC8(data, length):
-        #   pass
+    def calcCRC8(self, data):
+        crc = self.intialization
+
+        for byte in data:
+            crc ^= byte
+            for bit in range(8):
+                if crc & 0x80:
+                    crc = (crc << 1) ^ self.polynomial
+                else:
+                    crc = (crc << 1)
+                crc = crc % 256
+
+        return crc
