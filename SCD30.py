@@ -15,7 +15,7 @@ class Sensor:
     def dataReady(self):
         data = self.readRegister(self.COMMAND_DATA_READY, 3)
         ready = data[0] << 8 | data[1]
-        crc = self.calcCRC8(ready)
+        crc = self.calcCRC8(data[0:1])
         print(crc, data[2])
         if crc == data[2]:
             print("Verified")
