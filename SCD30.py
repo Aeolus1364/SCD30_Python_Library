@@ -24,7 +24,7 @@ class Sensor:
         value = data[0:2]
         crc = data[2]
         ready = self.compareCRC8(value, crc)
-        print(data, ready)
+        print(data, value, ready)
         return ready
 
     def sendCommand(self, cmd):  # sends a 2 byte command
