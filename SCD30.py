@@ -6,18 +6,25 @@ class Sensor:
     INITIALIZATION = 0xFF
 
     COMMAND_DATA_READY = 0x0202
+    COMMAND_READ_MEASUREMENT = 0x0300
 
     def __init__(self, port=1, address=0x61):
         self.bus = smbus.SMBus(port)
         self.adr = address
 
+    def readMeasurement(self):
+        if self.dataReady():
+            data = self.readRegister(self.COMMAND_READ_MEASUREMENT, 18)
+            return data
+        else:
+            print("Data not ready")
 
     def dataReady(self):
         data = self.readRegister(self.COMMAND_DATA_READY, 3)
         value = data[0:2]
         crc = data[3]
         return self.compareCRC8(value, crc)
-    
+
     def sendCommand(self, cmd):  # sends a 2 byte command
         data = [0]*2
         data[0] = cmd >> 8
