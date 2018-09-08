@@ -22,8 +22,10 @@ class Sensor:
     def dataReady(self):
         data = self.readRegister(self.COMMAND_DATA_READY, 3)
         value = data[0:2]
-        crc = data[3]
-        return self.compareCRC8(value, crc)
+        crc = data[2]
+        ready = self.compareCRC8(value, crc)
+        print(data, ready)
+        return ready
 
     def sendCommand(self, cmd):  # sends a 2 byte command
         data = [0]*2
