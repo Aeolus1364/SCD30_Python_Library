@@ -17,10 +17,7 @@ class Sensor:
         ready = data[0] << 8 | data[1]
         crc = self.calcCRC8(data[0:2])
         print(crc, data[2])
-        if crc == data[2]:
-            print("Verified")
-        else:
-            print("Not Verified")
+        print(self.compareCRC8(data[0:2], crc))
         return ready
 
     def sendCommand(self, cmd):  # sends a 2 byte command
@@ -34,6 +31,10 @@ class Sensor:
 
         data = self.bus.read_i2c_block_data(self.adr, 0, length)
         return data
+
+    def compareCRC8(self, data, crc):
+        calc = self.calcCRC8(data)
+        return calc == crc
 
     def calcCRC8(self, data):
         crc = self.INITIALIZATION
