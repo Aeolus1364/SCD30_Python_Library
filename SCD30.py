@@ -1,14 +1,21 @@
 import smbus
 
 class Sensor:
+
+    POLYNOMIAL = 0x31
+    INITIALIZATION = 0xFF
+
+    COMMAND_DATA_READY = 0x0202
+
     def __init__(self, port=1, address=0x61):
         self.bus = smbus.SMBus(port)
         self.adr = address
 
-        self.polynomial = 0x31
-        self.intialization = 0xFF
 
-
+    def dataReady(self):
+        data = self.readRegister(self.COMMAND_DATA_READY, 3)
+        ready = data[0] << 8 | data[1]
+        return ready
 
     def sendCommand(self, cmd):  # sends a 2 byte command
         data = [0]*2
@@ -23,13 +30,13 @@ class Sensor:
         return data
 
     def calcCRC8(self, data):
-        crc = self.intialization
+        crc = self.INITIALIZATION
 
         for byte in data:
             crc ^= byte
             for bit in range(8):
                 if crc & 0x80:
-                    crc = (crc << 1) ^ self.polynomial
+                    crc = (crc << 1) ^ self.POLYNOMIAL
                 else:
                     crc = (crc << 1)
                 crc = crc % 256
