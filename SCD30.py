@@ -15,6 +15,12 @@ class Sensor:
     def dataReady(self):
         data = self.readRegister(self.COMMAND_DATA_READY, 3)
         ready = data[0] << 8 | data[1]
+        crc = self.calcCRC8(ready)
+        print(crc, data[2])
+        if crc == data[2]:
+            print("Verified")
+        else:
+            print("Not Verified")
         return ready
 
     def sendCommand(self, cmd):  # sends a 2 byte command
