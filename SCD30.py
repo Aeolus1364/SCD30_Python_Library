@@ -47,6 +47,9 @@ class Sensor:
         calc = self.calcCRC8(data)
         return calc == crc
 
+    def mergeWord(self, data):
+        return data[0] << 8 | data[1]
+
     def verify(self, data):
         value = data[0:2]
         crc = data[2]
