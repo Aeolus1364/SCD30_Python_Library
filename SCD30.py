@@ -22,6 +22,7 @@ class Sensor:
             humm = data[12:15]
             huml = data[15:18]
             check = [self.verify(co2m), self.verify(co2l)]
+            test = [self.mergeWord(co2m), self.mergeWord(co2l)]
             return check
         else:
             print("Data not ready")
