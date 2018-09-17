@@ -20,7 +20,7 @@ class Sensor:
             print("Data not ready")
 
     def dataReady(self):
-        data = self.readRegister(self.COMMAND_DATA_READY, 4)
+        data = self.readRegister(self.COMMAND_DATA_READY, 3)
         value = data[0:2]
         crc = data[2]
         ready = self.compareCRC8(value, crc)

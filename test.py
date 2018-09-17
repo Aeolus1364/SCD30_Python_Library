@@ -2,4 +2,4 @@ import SCD30
 
 sensor = SCD30.Sensor()
 
-sensor.readMeasurement()
+print(sensor.readMeasurement())
