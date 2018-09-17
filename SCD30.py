@@ -23,12 +23,13 @@ class Sensor:
             huml = data[15:18]
             check = [self.verify(co2m), self.verify(co2l)]
             test = [self.mergeWord(co2m), self.mergeWord(co2l)]
-            return check
+            return check, test, [co2m, co2l]
         else:
             print("Data not ready")
 
     def dataReady(self):
         data = self.readRegister(self.COMMAND_DATA_READY, 3)
+        print(data)
         ready = self.verify(data)
         return ready
 
