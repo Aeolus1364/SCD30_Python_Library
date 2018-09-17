@@ -15,16 +15,20 @@ class Sensor:
     def readMeasurement(self):
         if self.dataReady():
             data = self.readRegister(self.COMMAND_READ_MEASUREMENT, 18)
-            return data
+            co2m = data[0:3]
+            co2l = data[3:6]
+            tempm = data[6:9]
+            templ = data[9:12]
+            humm = data[12:15]
+            huml = data[15:18]
+            check = [self.verify(co2m), self.verify(co2l)]
+            return check
         else:
             print("Data not ready")
 
     def dataReady(self):
         data = self.readRegister(self.COMMAND_DATA_READY, 3)
-        value = data[0:2]
-        crc = data[2]
-        ready = self.compareCRC8(value, crc)
-        print(data, value, ready)
+        ready = self.verify(data)
         return ready
 
     def sendCommand(self, cmd):  # sends a 2 byte command
@@ -42,6 +46,11 @@ class Sensor:
     def compareCRC8(self, data, crc):
         calc = self.calcCRC8(data)
         return calc == crc
+
+    def verify(self, data):
+        value = data[0:2]
+        crc = data[2]
+        return crc == self.calcCRC8(value)
 
     def calcCRC8(self, data):
         crc = self.INITIALIZATION
